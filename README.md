@@ -12,12 +12,23 @@ models (MobileNetV2 and ResNet50)**.
 > for facial expression classification, in terms of accuracy, efficiency, and the amount of
 > training data needed?
 
-## Dataset
+## Datasets
 
-[FER-2013](https://www.kaggle.com/datasets/msambare/fer2013): about 35,000 grayscale face images
-(48×48 px) labelled with 7 emotions: angry, disgust, fear, happy, sad, surprise, neutral.
+Both datasets use the same 7 emotions: angry, disgust, fear, happy, sad, surprise, neutral.
+Neither is included in this repository; download them and unzip into `data/raw/`.
 
-The dataset is not included in this repository. Download it from Kaggle and place it in `data/raw/`.
+| | [FER-2013](https://www.kaggle.com/datasets/msambare/fer2013) (default) | [RAF-DB](http://www.whdeng.cn/RAF/model1.html) |
+|---|---|---|
+| Images | 35,887 | 15,339 |
+| Format | 48×48 grayscale | 100×100 colour, aligned |
+| Labels | 1 annotator, known to be noisy | ~40 annotators per image |
+| Split (train / val / test) | 25,838 / 2,871 / 7,178 | 11,043 / 1,228 / 3,068 |
+| Largest class | happy 25.0% | happy 38.8% |
+| Smallest class | disgust 1.5% | fear 2.3% |
+| Folder | `data/raw/fer2013/` with `train/<emotion>/`, `test/<emotion>/` | `data/raw/rafdb/` with `train/<1-7>/`, `test/<1-7>/` ([Kaggle copy](https://www.kaggle.com/datasets/shuvoalok/raf-db-dataset)) or the official `EmoLabel/` + `Image/aligned/` layout |
+
+The validation set is a stratified 10% of the original training set. FER-2013's CSV version
+(`fer2013.csv`) is also supported.
 
 ### Label schemes
 
@@ -33,9 +44,9 @@ less positive facial affect.
 
 | Model | Input | Description |
 |---|---|---|
-| Scratch CNN | 48×48×1 | 4 convolutional blocks (Conv–BN–ReLU ×2, max-pool, dropout) + dense head |
-| MobileNetV2 | 96×96×3 | ImageNet-pretrained, frozen backbone, then fine-tuned |
-| ResNet50 | 96×96×3 | ImageNet-pretrained, frozen backbone, then fine-tuned |
+| Scratch CNN | native (48×48×1 FER-2013, 100×100×3 RAF-DB) | 4 convolutional blocks (Conv–BN–ReLU ×2, max-pool, dropout), global average pooling, dense head |
+| MobileNetV2 | 224×224×3 | ImageNet-pretrained, frozen backbone, then fine-tuned |
+| ResNet50 | 224×224×3 | ImageNet-pretrained, frozen backbone, then fine-tuned |
 
 All models use the same data splits, augmentation (flip, rotation, zoom, shift), class weighting,
 and evaluation, so the comparison is fair.
@@ -47,30 +58,42 @@ and evaluation, so the comparison is fair.
    where transfer learning helps most.
 3. Every configuration is run with several random seeds and reported as mean ± std.
 
-**Metrics:** accuracy, macro-F1 (FER-2013 is imbalanced), per-class recall, confusion matrix,
+**Metrics:** accuracy, macro-F1 (the classes are imbalanced), per-class recall, confusion matrix,
 number of parameters, training time, and inference time per image.
 
 ## Project structure
 
 ```
 FacemoodClassifier/
-├── data/
-│   ├── raw/                 # FER-2013 as downloaded (not committed)
-│   └── processed/           # fixed train/val/test splits (not committed)
 ├── src/
-│   ├── data.py              # loading, splits, label schemes, augmentation, class weights
-│   ├── eda.py               # exploratory data analysis figures
+│   ├── config.py                # paths and constants
+│   ├── data/
+│   │   ├── labels.py            # emotion7 / affect3 label schemes
+│   │   ├── prepare.py           # reads raw RAF-DB / FER-2013, builds fixed splits
+│   │   ├── dataset.py           # loading splits, class weights, tf.data + augmentation
+│   │   └── eda.py               # exploratory data analysis
 │   ├── models/
-│   │   ├── scratch_cnn.py   # CNN from scratch
-│   │   └── transfer.py      # MobileNetV2 / ResNet50
-│   ├── train.py             # trains one model configuration
-│   ├── evaluate.py          # test-set metrics and summary across runs
-│   └── plots.py             # shared figure style
-├── results/
-│   ├── figures/
-│   └── runs/                # one folder per training run
+│   │   ├── scratch_cnn.py       # CNN from scratch
+│   │   └── transfer.py          # MobileNetV2 / ResNet50
+│   ├── training/
+│   │   └── train.py             # trains one model configuration
+│   ├── evaluation/              # test-set metrics and comparison of runs
+│   └── visualization/
+│       └── plots.py             # shared figure style
 ├── requirements.txt
 └── README.md
+```
+
+Created when you run the code (not committed):
+
+```
+data/
+├── raw/                         # datasets as downloaded (e.g. raw/rafdb/)
+└── processed/                   # fixed train/val/test splits
+results/
+├── figures/                     # EDA figures
+├── tables/                      # EDA class-count tables
+└── runs/                        # one folder per training run
 ```
 
 ## Setup
@@ -87,23 +110,22 @@ pip install -r requirements.txt
 
 ```bash
 # 1. Build the fixed train/val/test splits (run once)
-python -m src.data --source data/raw/fer2013        # folder version
-python -m src.data --source data/raw/fer2013.csv    # or the CSV version
+python -m src.data.prepare --dataset fer2013 --source data/raw/fer2013
+python -m src.data.prepare --dataset rafdb --source data/raw/rafdb
 
 # 2. Explore the data
-python -m src.eda
+python -m src.data.eda
 
-# 3. Train and evaluate a model
-python -m src.train --model scratch_cnn --labels emotion7
-python -m src.train --model scratch_cnn --labels affect3
-python -m src.train --model scratch_cnn --train-fraction 0.25 --seed 1
-
-# 4. Collect the results of all runs into one table
-python -m src.evaluate --summary
+# 3. Train a model
+python -m src.training.train --model scratch_cnn --labels emotion7
+python -m src.training.train --model scratch_cnn --labels affect3
+python -m src.training.train --model scratch_cnn --train-fraction 0.25 --seed 1
 ```
 
-Each run saves its model, training curves, confusion matrix, classification report and metrics
-to `results/runs/<model>_<labels>_f<fraction>_s<seed>/`.
+Each run saves its best model, config, training history, training curves and a validation
+summary to `results/runs/<dataset>_<model>_<labels>_f<fraction>_s<seed>/`.
+
+All commands use FER-2013 by default; add `--dataset rafdb` to use RAF-DB instead.
 
 ## Team
 
@@ -116,5 +138,5 @@ to `results/runs/<model>_<labels>_f<fraction>_s<seed>/`.
 
 This project recognises **facial expressions** associated with depression. It does **not**
 diagnose depression. Facial expressions alone are not a valid basis for a mental-health
-diagnosis, and FER-2013 contains no clinical labels. The models should not be used to make
+diagnosis, and RAF-DB contains no clinical labels. The models should not be used to make
 decisions about individuals.

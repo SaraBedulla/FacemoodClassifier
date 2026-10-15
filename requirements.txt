@@ -1,0 +1,6 @@
+tensorflow==2.16.2
+tensorflow-metal==1.2.0; sys_platform == "darwin" and platform_machine == "arm64"  # Apple Silicon GPU
+scikit-learn
+pandas
+matplotlib
+pillow

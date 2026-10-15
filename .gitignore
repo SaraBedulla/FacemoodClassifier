@@ -1,5 +1,9 @@
 .venv/
 .idea/
 __pycache__/
-data/raw/
-data/processed/
+
+# Dataset and generated splits
+/data/
+
+# Training outputs
+/results/
