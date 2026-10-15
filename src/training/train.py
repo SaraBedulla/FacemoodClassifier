@@ -22,7 +22,7 @@ from tensorflow import keras
 
 from src.config.config import DATASETS, DEFAULT_DATASET, RUNS_DIR
 from src.data.dataset import class_weights, load_split, make_dataset
-from src.models import MODELS
+from src.models.registry import MODELS
 from src.visualization import plots
 
 

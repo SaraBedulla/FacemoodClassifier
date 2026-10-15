@@ -66,13 +66,15 @@ number of parameters, training time, and inference time per image.
 ```
 FacemoodClassifier/
 ├── src/
-│   ├── config.py                # paths and constants
+│   ├── config/
+│   │   └── config.py            # paths and constants
 │   ├── data/
 │   │   ├── labels.py            # emotion7 / affect3 label schemes
 │   │   ├── prepare.py           # reads raw RAF-DB / FER-2013, builds fixed splits
 │   │   ├── dataset.py           # loading splits, class weights, tf.data + augmentation
 │   │   └── eda.py               # exploratory data analysis
 │   ├── models/
+│   │   ├── registry.py          # list of models available for training
 │   │   ├── scratch_cnn.py       # CNN from scratch
 │   │   └── transfer.py          # MobileNetV2 / ResNet50
 │   ├── training/
