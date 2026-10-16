@@ -1,0 +1,19 @@
+{
+  "run": "fer2013_resnet50_affect3_f1_s42",
+  "dataset": "fer2013",
+  "model": "resnet50",
+  "labels": "affect3",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "test_accuracy": 0.763,
+  "test_macro_f1": 0.74,
+  "per_class_recall": {
+    "negative": 0.7111,
+    "neutral": 0.7202,
+    "positive": 0.8499
+  },
+  "params": 23593859,
+  "train_seconds": 2270.0,
+  "ms_per_image": 2.341,
+  "device": "GPU"
+}

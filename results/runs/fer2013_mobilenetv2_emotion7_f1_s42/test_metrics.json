@@ -1,0 +1,23 @@
+{
+  "run": "fer2013_mobilenetv2_emotion7_f1_s42",
+  "dataset": "fer2013",
+  "model": "mobilenetv2",
+  "labels": "emotion7",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "test_accuracy": 0.6301,
+  "test_macro_f1": 0.6053,
+  "per_class_recall": {
+    "angry": 0.5898,
+    "disgust": 0.7117,
+    "fear": 0.377,
+    "happy": 0.8546,
+    "sad": 0.433,
+    "surprise": 0.7545,
+    "neutral": 0.6569
+  },
+  "params": 2266951,
+  "train_seconds": 2303.3,
+  "ms_per_image": 1.153,
+  "device": "GPU"
+}

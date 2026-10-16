@@ -1,0 +1,19 @@
+{
+  "run": "fer2013_scratch_cnn_affect3_f1_s42",
+  "dataset": "fer2013",
+  "model": "scratch_cnn",
+  "labels": "affect3",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "test_accuracy": 0.7449,
+  "test_macro_f1": 0.7232,
+  "per_class_recall": {
+    "negative": 0.7246,
+    "neutral": 0.704,
+    "positive": 0.7904
+  },
+  "params": 4822851,
+  "train_seconds": 893.7,
+  "ms_per_image": 0.176,
+  "device": "GPU"
+}

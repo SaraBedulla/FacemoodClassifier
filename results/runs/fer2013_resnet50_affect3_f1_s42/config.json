@@ -1,0 +1,23 @@
+{
+  "dataset": "fer2013",
+  "model": "resnet50",
+  "labels": "affect3",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "epochs": 60,
+  "batch_size": 64,
+  "lr": 0.001,
+  "patience": 10,
+  "no_class_weights": false,
+  "img_size": 224,
+  "head_epochs": 10,
+  "fine_tune_lr": 1e-05,
+  "fine_tune_layers": 32,
+  "channels": 3,
+  "train_size": 25838,
+  "class_weights": {
+    "0": 0.7164088060777464,
+    "1": 1.9272022078018944,
+    "2": 0.9214364680289576
+  }
+}

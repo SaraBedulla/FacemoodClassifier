@@ -1,0 +1,11 @@
+{
+  "run": "fer2013_resnet50_emotion7_f1_s42",
+  "best_epoch": 24,
+  "epochs_trained": 34,
+  "fine_tune_start_epoch": 11,
+  "best_val_loss": 0.991,
+  "best_val_accuracy": 0.6371,
+  "params": 23602055,
+  "trainable_params": 14967815,
+  "train_seconds": 2668.5
+}

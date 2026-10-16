@@ -1,0 +1,7 @@
+dataset,labels,model,train_fraction,test_accuracy_mean,test_accuracy_std,test_macro_f1_mean,test_macro_f1_std,train_seconds_mean,train_seconds_std,ms_per_image_mean,ms_per_image_std,params,seeds
+fer2013,affect3,scratch_cnn,1.0,0.7449,,0.7232,,893.7,,0.176,,4822851,1
+fer2013,affect3,mobilenetv2,1.0,0.7595,,0.7334,,1668.8,,1.143,,2261827,1
+fer2013,affect3,resnet50,1.0,0.763,,0.74,,2270.0,,2.341,,23593859,1
+fer2013,emotion7,scratch_cnn,1.0,0.6475,,0.6334,,1644.8,,0.175,,4823879,1
+fer2013,emotion7,mobilenetv2,1.0,0.6301,,0.6053,,2303.3,,1.153,,2266951,1
+fer2013,emotion7,resnet50,1.0,0.6382,,0.6034,,2668.5,,2.334,,23602055,1

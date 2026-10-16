@@ -1,0 +1,23 @@
+{
+  "run": "fer2013_scratch_cnn_emotion7_f1_s42",
+  "dataset": "fer2013",
+  "model": "scratch_cnn",
+  "labels": "emotion7",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "test_accuracy": 0.6475,
+  "test_macro_f1": 0.6334,
+  "per_class_recall": {
+    "angry": 0.5783,
+    "disgust": 0.6757,
+    "fear": 0.4238,
+    "happy": 0.8078,
+    "sad": 0.4884,
+    "surprise": 0.8424,
+    "neutral": 0.6837
+  },
+  "params": 4823879,
+  "train_seconds": 1644.8,
+  "ms_per_image": 0.175,
+  "device": "GPU"
+}

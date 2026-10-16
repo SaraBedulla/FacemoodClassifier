@@ -1,0 +1,7 @@
+run,dataset,model,labels,train_fraction,seed,test_accuracy,test_macro_f1,params,train_seconds,ms_per_image,device
+fer2013_scratch_cnn_affect3_f1_s42,fer2013,scratch_cnn,affect3,1.0,42,0.7449,0.7232,4822851,893.7,0.176,GPU
+fer2013_mobilenetv2_affect3_f1_s42,fer2013,mobilenetv2,affect3,1.0,42,0.7595,0.7334,2261827,1668.8,1.143,GPU
+fer2013_resnet50_affect3_f1_s42,fer2013,resnet50,affect3,1.0,42,0.763,0.74,23593859,2270.0,2.341,GPU
+fer2013_scratch_cnn_emotion7_f1_s42,fer2013,scratch_cnn,emotion7,1.0,42,0.6475,0.6334,4823879,1644.8,0.175,GPU
+fer2013_mobilenetv2_emotion7_f1_s42,fer2013,mobilenetv2,emotion7,1.0,42,0.6301,0.6053,2266951,2303.3,1.153,GPU
+fer2013_resnet50_emotion7_f1_s42,fer2013,resnet50,emotion7,1.0,42,0.6382,0.6034,23602055,2668.5,2.334,GPU

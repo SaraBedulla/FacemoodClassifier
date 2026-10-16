@@ -1,0 +1,4 @@
+,train,val,test,total,share_%
+negative,12022,1336,3340,16698,46.5
+neutral,4469,496,1233,6198,17.3
+positive,9347,1039,2605,12991,36.2

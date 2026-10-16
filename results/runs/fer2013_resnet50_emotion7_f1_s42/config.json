@@ -1,0 +1,27 @@
+{
+  "dataset": "fer2013",
+  "model": "resnet50",
+  "labels": "emotion7",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "epochs": 60,
+  "batch_size": 64,
+  "lr": 0.001,
+  "patience": 10,
+  "no_class_weights": false,
+  "img_size": 224,
+  "head_epochs": 10,
+  "fine_tune_lr": 1e-05,
+  "fine_tune_layers": 32,
+  "channels": 3,
+  "train_size": 25838,
+  "class_weights": {
+    "0": 1.026457969172096,
+    "1": 9.416180758017493,
+    "2": 1.0011236390406448,
+    "3": 0.5684803414666344,
+    "4": 0.8491241907390976,
+    "5": 1.2933226549204124,
+    "6": 0.8259438033436691
+  }
+}

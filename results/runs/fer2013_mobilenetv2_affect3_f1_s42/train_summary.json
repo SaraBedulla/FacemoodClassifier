@@ -1,0 +1,11 @@
+{
+  "run": "fer2013_mobilenetv2_affect3_f1_s42",
+  "best_epoch": 34,
+  "epochs_trained": 44,
+  "fine_tune_start_epoch": 11,
+  "best_val_loss": 0.5621,
+  "best_val_accuracy": 0.7604,
+  "params": 2261827,
+  "trainable_params": 1667203,
+  "train_seconds": 1668.8
+}

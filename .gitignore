@@ -5,5 +5,5 @@ __pycache__/
 # Dataset and generated splits
 /data/
 
-# Training outputs
-/results/
+# Training outputs: keep figures/tables/summaries, skip model weights (share via Drive)
+/results/**/*.keras

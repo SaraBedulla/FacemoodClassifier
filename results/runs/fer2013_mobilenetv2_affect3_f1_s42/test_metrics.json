@@ -1,0 +1,19 @@
+{
+  "run": "fer2013_mobilenetv2_affect3_f1_s42",
+  "dataset": "fer2013",
+  "model": "mobilenetv2",
+  "labels": "affect3",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "test_accuracy": 0.7595,
+  "test_macro_f1": 0.7334,
+  "per_class_recall": {
+    "negative": 0.7365,
+    "neutral": 0.6715,
+    "positive": 0.8307
+  },
+  "params": 2261827,
+  "train_seconds": 1668.8,
+  "ms_per_image": 1.143,
+  "device": "GPU"
+}

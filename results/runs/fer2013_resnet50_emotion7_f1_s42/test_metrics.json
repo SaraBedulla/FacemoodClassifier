@@ -1,0 +1,23 @@
+{
+  "run": "fer2013_resnet50_emotion7_f1_s42",
+  "dataset": "fer2013",
+  "model": "resnet50",
+  "labels": "emotion7",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "test_accuracy": 0.6382,
+  "test_macro_f1": 0.6034,
+  "per_class_recall": {
+    "angry": 0.5595,
+    "disgust": 0.6486,
+    "fear": 0.3232,
+    "happy": 0.8444,
+    "sad": 0.5076,
+    "surprise": 0.7726,
+    "neutral": 0.7048
+  },
+  "params": 23602055,
+  "train_seconds": 2668.5,
+  "ms_per_image": 2.334,
+  "device": "GPU"
+}
