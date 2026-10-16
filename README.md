@@ -1,5 +1,7 @@
 # FacemoodClassifier
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SaraBedulla/FacemoodClassifier/blob/main/notebooks/FacemoodClassifier_colab.ipynb)
+
 Depression-related facial expression classification with deep learning.
 
 This project classifies facial-expression images into emotions and into depression-related
@@ -65,6 +67,8 @@ number of parameters, training time, and inference time per image.
 
 ```
 FacemoodClassifier/
+├── notebooks/
+│   └── FacemoodClassifier_colab.ipynb   # full pipeline, runs on Colab or locally
 ├── src/
 │   ├── config/
 │   │   └── config.py            # paths and constants
@@ -107,6 +111,13 @@ python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
+
+## Running on Google Colab
+
+Open [`notebooks/FacemoodClassifier_colab.ipynb`](notebooks/FacemoodClassifier_colab.ipynb) with the badge
+above, choose *Runtime → Change runtime type → T4 GPU*, then *Runtime → Run all*. The notebook clones this
+repository, downloads FER-2013 from Kaggle, and runs the same commands as below. The same notebook also runs
+locally, where it uses the dataset already in `data/raw/`.
 
 ## Usage
 
