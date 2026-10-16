@@ -1,0 +1,20 @@
+{
+  "dataset": "fer2013",
+  "model": "scratch_cnn",
+  "labels": "affect3",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "epochs": 60,
+  "batch_size": 64,
+  "lr": 0.001,
+  "patience": 10,
+  "no_class_weights": false,
+  "img_size": 48,
+  "channels": 1,
+  "train_size": 25838,
+  "class_weights": {
+    "0": 0.7164088060777464,
+    "1": 1.9272022078018944,
+    "2": 0.9214364680289576
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "run": "fer2013_scratch_cnn_emotion7_f1_s42",
+  "best_epoch": 52,
+  "epochs_trained": 60,
+  "best_val_loss": 1.0023,
+  "best_val_accuracy": 0.6329,
+  "params": 4823879,
+  "train_seconds": 1644.8
+}

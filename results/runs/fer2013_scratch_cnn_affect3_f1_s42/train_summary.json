@@ -1,0 +1,9 @@
+{
+  "run": "fer2013_scratch_cnn_affect3_f1_s42",
+  "best_epoch": 23,
+  "epochs_trained": 33,
+  "best_val_loss": 0.5808,
+  "best_val_accuracy": 0.7517,
+  "params": 4822851,
+  "train_seconds": 893.7
+}
