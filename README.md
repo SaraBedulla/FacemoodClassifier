@@ -48,18 +48,27 @@ less positive facial affect.
 | Model | Input | Description |
 |---|---|---|
 | Scratch CNN | native (48×48×1 FER-2013, 100×100×3 RAF-DB) | 4 convolutional blocks (Conv–BN–ReLU ×2, max-pool, dropout), global average pooling, dense head |
-| MobileNetV2 | 224×224×3 | ImageNet-pretrained, frozen backbone, then fine-tuned |
-| ResNet50 | 224×224×3 | ImageNet-pretrained, frozen backbone, then fine-tuned |
+| MobileNetV2 | 224×224×3 | ImageNet-pretrained backbone (2.3M parameters), new head; fine-tunes the last 3 blocks (`block_13` onwards) |
+| ResNet50 | 224×224×3 | ImageNet-pretrained backbone (23.6M parameters), new head; fine-tunes the last stage (`conv5`) |
+
+The transfer models resize each face to 224×224 and copy grayscale images to 3 channels. Each model
+applies its own ImageNet preprocessing inside the network, so every model takes raw 0–255 pixels.
+The new head is global average pooling → dropout (0.3) → softmax. They train in two phases:
+
+1. **Head**: the backbone is frozen and only the new head trains (Adam, learning rate 1e-3, up to 10 epochs).
+2. **Fine-tune**: the top backbone stage is unfrozen and trains together with the head (learning rate 1e-5)
+   until early stopping. BatchNorm layers stay frozen so the ImageNet statistics are kept.
 
 All models use the same data splits, augmentation (flip, rotation, zoom, shift), class weighting,
 and evaluation, so the comparison is fair.
 
 ## Experiments
 
-1. **Main comparison**: all three models on `emotion7` and `affect3`.
-2. **Training-data size**: each model trained on 10%, 25%, 50% and 100% of the training set, to see
-   where transfer learning helps most.
-3. Every configuration is run with several random seeds and reported as mean ± std.
+1. **Main comparison**: all three models on `emotion7` and `affect3`, 3 random seeds each.
+2. **Training-data size**: the scratch CNN and MobileNetV2 trained on 10%, 25%, 50% and 100% of the
+   `emotion7` training set, to see where transfer learning helps most. ResNet50 is left out of this
+   experiment to save GPU time.
+3. Results are reported as mean ± std over seeds.
 
 **Metrics:** accuracy, macro-F1 (the classes are imbalanced), per-class recall, confusion matrix,
 number of parameters, training time, and inference time per image.
@@ -79,12 +88,14 @@ FacemoodClassifier/
 │   │   ├── dataset.py           # loading splits, class weights, tf.data + augmentation
 │   │   └── eda.py               # exploratory data analysis
 │   ├── models/
-│   │   ├── registry.py          # list of models available for training
+│   │   ├── registry.py          # models available for training, input size, layers to fine-tune
 │   │   ├── scratch_cnn.py       # CNN from scratch
-│   │   └── transfer.py          # MobileNetV2 / ResNet50
+│   │   └── transfer.py          # MobileNetV2 / ResNet50 with a new head, unfreezing for fine-tuning
 │   ├── training/
-│   │   └── train.py             # trains one model configuration
-│   ├── evaluation/              # test-set metrics and comparison of runs
+│   │   └── train.py             # trains one model configuration (two phases for transfer models)
+│   ├── evaluation/
+│   │   ├── evaluate.py          # test-set metrics, confusion matrix, sample predictions per run
+│   │   └── compare.py           # mean ± std over seeds, data-size figure
 │   └── visualization/
 │       └── plots.py             # shared figure style
 ├── DATASET.md                   # dataset links, description and splits
@@ -99,20 +110,24 @@ data/
 ├── raw/                         # datasets as downloaded (e.g. raw/rafdb/)
 └── processed/                   # fixed train/val/test splits
 results/
-├── figures/                     # EDA figures
-├── tables/                      # EDA class-count tables
+├── figures/                     # EDA and comparison figures
+├── tables/                      # EDA class counts and comparison tables
 └── runs/                        # one folder per training run
 ```
 
 ## Setup
 
-Requires Python 3.9+.
+Requires Python 3.9–3.12 (TensorFlow 2.16 has no wheels for newer versions).
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
+
+`tensorflow-metal` (Apple Silicon GPU) is only installed on macOS; pip skips it elsewhere.
+TensorFlow has no GPU support on native Windows, so a local Windows setup runs on the CPU. That is fine
+for the scratch CNN and quick tests, but train the transfer models on Colab (below).
 
 ## Running on Google Colab
 
@@ -135,10 +150,23 @@ python -m src.data.eda
 python -m src.training.train --model scratch_cnn --labels emotion7
 python -m src.training.train --model scratch_cnn --labels affect3
 python -m src.training.train --model scratch_cnn --train-fraction 0.25 --seed 1
+python -m src.training.train --model mobilenetv2 --labels emotion7
+python -m src.training.train --model resnet50 --labels affect3
+
+# 4. Evaluate every trained run on the test set, then compare models
+python -m src.evaluation.evaluate
+python -m src.evaluation.compare
 ```
 
 Each run saves its best model, config, training history, training curves and a validation
-summary to `results/runs/<dataset>_<model>_<labels>_f<fraction>_s<seed>/`.
+summary to `results/runs/<dataset>_<model>_<labels>_f<fraction>_s<seed>/`. Evaluation adds
+`test_metrics.json`, `confusion_matrix.png` and `predictions.png` to the same folder. The comparison
+writes `results/tables/comparison/summary.csv` (mean ± std over seeds) and a macro-F1 vs training-data
+figure per label scheme to `results/figures/comparison/`.
+
+Useful options for the transfer models: `--head-epochs` (default 10), `--fine-tune-lr` (default 1e-5),
+`--fine-tune-layers` (0 trains the head only) and `--img-size` (e.g. 128 for faster runs).
+If ResNet50 runs out of GPU memory, use `--batch-size 32`.
 
 All commands use FER-2013 by default; add `--dataset rafdb` to use RAF-DB instead.
 

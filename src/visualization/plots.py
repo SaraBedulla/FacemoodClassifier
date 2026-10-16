@@ -4,6 +4,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
+from matplotlib.ticker import MaxNLocator  # noqa: E402
 
 SERIES = ["#2a78d6", "#eb6834", "#1baf7a"]  # categorical slots 1-3, fixed order
 INK = "#0b0b0b"
@@ -101,15 +102,91 @@ def plot_mean_faces(x, y, class_names, path):
     save(fig, path)
 
 
-def plot_history(history, path):
-    """Loss and accuracy curves, train vs validation."""
+def plot_history(history, path, fine_tune_start=None):
+    """Loss and accuracy curves, train vs validation.
+
+    fine_tune_start: number of head-only epochs before fine-tuning began (transfer models);
+    a dashed line marks where fine-tuning starts.
+    """
     fig, axes = plt.subplots(1, 2, figsize=(10, 3.6))
     epochs = np.arange(1, len(history["loss"]) + 1)
     for ax, metric, title in [(axes[0], "loss", "Loss"), (axes[1], "accuracy", "Accuracy")]:
         ax.plot(epochs, history[metric], color=SERIES[0], label="train")
         ax.plot(epochs, history[f"val_{metric}"], color=SERIES[1], label="validation")
+        if fine_tune_start:
+            ax.axvline(fine_tune_start + 0.5, color=MUTED, linestyle="--", linewidth=1,
+                       label="fine-tuning starts")
+        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax.set_xlabel("Epoch")
         ax.set_title(title)
         ax.legend()
+    save(fig, path)
+
+
+def plot_confusion_matrix(cm, class_names, path, title="Confusion matrix"):
+    """Row-normalised confusion matrix: each row shows how one true class was predicted."""
+    from matplotlib.colors import LinearSegmentedColormap
+
+    cmap = LinearSegmentedColormap.from_list("blues", [SURFACE, SERIES[0]])
+    rates = cm / np.maximum(cm.sum(axis=1, keepdims=True), 1)
+    size = 0.75 * len(class_names) + 1.5
+    fig, ax = plt.subplots(figsize=(size, size))
+    ax.imshow(rates, cmap=cmap, vmin=0, vmax=1)
+    ax.grid(False)
+    for i in range(len(class_names)):
+        for j in range(len(class_names)):
+            ax.text(j, i, f"{rates[i, j]:.0%}", ha="center", va="center", fontsize=8,
+                    color=SURFACE if rates[i, j] > 0.55 else INK_2)
+    ticks = np.arange(len(class_names))
+    ax.set_xticks(ticks, class_names, rotation=45, ha="right")
+    ax.set_yticks(ticks, class_names)
+    ax.set_xlabel("Predicted")
+    ax.set_ylabel("True")
+    ax.set_title(title)
+    save(fig, path)
+
+
+def plot_predictions(x, y_true, y_pred, class_names, path, per_group=8, seed=0):
+    """Two rows of test images: correctly and incorrectly classified, labelled true / predicted."""
+    rng = np.random.default_rng(seed)
+    groups = [("Correct", np.flatnonzero(y_true == y_pred)),
+              ("Incorrect", np.flatnonzero(y_true != y_pred))]
+    fig, axes = plt.subplots(2, per_group, figsize=(per_group * 1.3, 3.4))
+    for row, (name, idx) in enumerate(groups):
+        chosen = rng.choice(idx, size=min(per_group, len(idx)), replace=False)
+        for col, ax in enumerate(axes[row]):
+            ax.axis("off")
+            if col < len(chosen):
+                i = chosen[col]
+                _show(ax, x[i])
+                ax.set_title(f"{class_names[y_true[i]]}\n→ {class_names[y_pred[i]]}", fontsize=7,
+                             fontweight="normal", loc="center",
+                             color=INK_2 if row == 0 else SERIES[1])
+        axes[row, 0].text(-0.15, 0.5, name, transform=axes[row, 0].transAxes,
+                          ha="right", va="center", color=INK_2)
+    fig.suptitle("Test predictions (true → predicted)", x=0.02, ha="left",
+                 fontweight="bold", color=INK)
+    save(fig, path)
+
+
+def plot_data_size(table, path, metric="test_macro_f1", title="Macro-F1 vs training-set size"):
+    """One line per model: mean metric (± std over seeds) against the fraction of training data.
+
+    table needs columns: model, train_fraction, <metric>_mean, <metric>_std.
+    """
+    fig, ax = plt.subplots(figsize=(6.5, 4))
+    for color, (model, rows) in zip(SERIES, table.groupby("model", sort=False)):
+        rows = rows.sort_values("train_fraction")
+        ax.errorbar(rows["train_fraction"] * 100, rows[f"{metric}_mean"],
+                    yerr=rows[f"{metric}_std"].fillna(0), color=color, marker="o",
+                    capsize=3, label=model)
+    ax.set_xscale("log")
+    fractions = sorted(table["train_fraction"].unique() * 100)
+    ax.set_xticks(fractions, [f"{f:g}%" for f in fractions])
+    ax.minorticks_off()
+    ax.set_xlabel("Training data used")
+    ax.set_ylabel(metric.replace("test_", "").replace("_", "-"))
+    ax.set_title(title)
+    ax.legend()
     save(fig, path)
 
