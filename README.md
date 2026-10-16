@@ -18,6 +18,7 @@ models (MobileNetV2 and ResNet50)**.
 
 Both datasets use the same 7 emotions: angry, disgust, fear, happy, sad, surprise, neutral.
 Neither is included in this repository; download them and unzip into `data/raw/`.
+Full description, links and class counts: [DATASET.md](DATASET.md).
 
 | | [FER-2013](https://www.kaggle.com/datasets/msambare/fer2013) (default) | [RAF-DB](http://www.whdeng.cn/RAF/model1.html) |
 |---|---|---|
@@ -86,6 +87,7 @@ FacemoodClassifier/
 │   ├── evaluation/              # test-set metrics and comparison of runs
 │   └── visualization/
 │       └── plots.py             # shared figure style
+├── DATASET.md                   # dataset links, description and splits
 ├── requirements.txt
 └── README.md
 ```
