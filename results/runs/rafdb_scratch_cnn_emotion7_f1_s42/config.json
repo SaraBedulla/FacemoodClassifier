@@ -1,0 +1,27 @@
+{
+  "dataset": "rafdb",
+  "model": "scratch_cnn",
+  "labels": "emotion7",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "epochs": 100,
+  "batch_size": 64,
+  "lr": 0.0003,
+  "patience": 20,
+  "no_class_weights": false,
+  "img_size": 100,
+  "head_epochs": 10,
+  "fine_tune_lr": 1e-05,
+  "fine_tune_layers": 0,
+  "channels": 3,
+  "train_size": 11043,
+  "class_weights": {
+    "0": 2.4882830103650293,
+    "1": 2.445847176079734,
+    "2": 6.2354601919819315,
+    "3": 0.3673041742890404,
+    "4": 0.8842889173606663,
+    "5": 1.3588039867109634,
+    "6": 0.6946593696923948
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "run": "rafdb_resnet50_emotion7_f1_s42",
+  "dataset": "rafdb",
+  "model": "resnet50",
+  "labels": "emotion7",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "test_accuracy": 0.6965,
+  "test_macro_f1": 0.6083,
+  "per_class_recall": {
+    "angry": 0.5309,
+    "disgust": 0.5,
+    "fear": 0.5,
+    "happy": 0.7941,
+    "sad": 0.659,
+    "surprise": 0.7994,
+    "neutral": 0.6103
+  },
+  "params": 23602055,
+  "train_seconds": 1044.6,
+  "ms_per_image": 2.477,
+  "device": "GPU"
+}

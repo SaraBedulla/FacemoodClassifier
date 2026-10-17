@@ -1,0 +1,23 @@
+{
+  "run": "rafdb_scratch_cnn_emotion7_f1_s42",
+  "dataset": "rafdb",
+  "model": "scratch_cnn",
+  "labels": "emotion7",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "test_accuracy": 0.7865,
+  "test_macro_f1": 0.6998,
+  "per_class_recall": {
+    "angry": 0.7284,
+    "disgust": 0.45,
+    "fear": 0.6486,
+    "happy": 0.8515,
+    "sad": 0.7762,
+    "surprise": 0.8055,
+    "neutral": 0.7794
+  },
+  "params": 4825031,
+  "train_seconds": 4422.2,
+  "ms_per_image": 0.64,
+  "device": "GPU"
+}

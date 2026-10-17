@@ -1,0 +1,23 @@
+{
+  "run": "rafdb_mobilenetv2_emotion7_f1_s42",
+  "dataset": "rafdb",
+  "model": "mobilenetv2",
+  "labels": "emotion7",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "test_accuracy": 0.6538,
+  "test_macro_f1": 0.5751,
+  "per_class_recall": {
+    "angry": 0.6605,
+    "disgust": 0.4875,
+    "fear": 0.5676,
+    "happy": 0.6937,
+    "sad": 0.6485,
+    "surprise": 0.6565,
+    "neutral": 0.6338
+  },
+  "params": 2266951,
+  "train_seconds": 861.1,
+  "ms_per_image": 1.309,
+  "device": "GPU"
+}

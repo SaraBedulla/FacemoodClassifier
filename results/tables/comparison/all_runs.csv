@@ -5,3 +5,9 @@ fer2013_resnet50_affect3_f1_s42,fer2013,resnet50,affect3,1.0,42,0.763,0.74,23593
 fer2013_scratch_cnn_emotion7_f1_s42,fer2013,scratch_cnn,emotion7,1.0,42,0.6475,0.6334,4823879,1644.8,0.175,GPU
 fer2013_mobilenetv2_emotion7_f1_s42,fer2013,mobilenetv2,emotion7,1.0,42,0.6301,0.6053,2266951,2303.3,1.153,GPU
 fer2013_resnet50_emotion7_f1_s42,fer2013,resnet50,emotion7,1.0,42,0.6382,0.6034,23602055,2668.5,2.334,GPU
+rafdb_scratch_cnn_affect3_f1_s42,rafdb,scratch_cnn,affect3,1.0,42,0.824,0.8076,4824003,1913.3,0.651,GPU
+rafdb_mobilenetv2_affect3_f1_s42,rafdb,mobilenetv2,affect3,1.0,42,0.7562,0.7397,2261827,930.1,1.271,GPU
+rafdb_resnet50_affect3_f1_s42,rafdb,resnet50,affect3,1.0,42,0.7813,0.7621,23593859,1119.6,2.476,GPU
+rafdb_scratch_cnn_emotion7_f1_s42,rafdb,scratch_cnn,emotion7,1.0,42,0.7865,0.6998,4825031,4422.2,0.64,GPU
+rafdb_mobilenetv2_emotion7_f1_s42,rafdb,mobilenetv2,emotion7,1.0,42,0.6538,0.5751,2266951,861.1,1.309,GPU
+rafdb_resnet50_emotion7_f1_s42,rafdb,resnet50,emotion7,1.0,42,0.6965,0.6083,23602055,1044.6,2.477,GPU

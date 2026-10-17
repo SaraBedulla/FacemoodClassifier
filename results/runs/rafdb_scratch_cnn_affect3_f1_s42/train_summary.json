@@ -1,0 +1,11 @@
+{
+  "run": "rafdb_scratch_cnn_affect3_f1_s42",
+  "best_epoch": 37,
+  "epochs_trained": 47,
+  "fine_tune_start_epoch": null,
+  "best_val_loss": 0.4579,
+  "best_val_accuracy": 0.8111,
+  "params": 4824003,
+  "trainable_params": 4819651,
+  "train_seconds": 1913.3
+}

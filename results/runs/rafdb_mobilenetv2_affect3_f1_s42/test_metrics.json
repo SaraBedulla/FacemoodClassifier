@@ -1,0 +1,19 @@
+{
+  "run": "rafdb_mobilenetv2_affect3_f1_s42",
+  "dataset": "rafdb",
+  "model": "mobilenetv2",
+  "labels": "affect3",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "test_accuracy": 0.7562,
+  "test_macro_f1": 0.7397,
+  "per_class_recall": {
+    "negative": 0.746,
+    "neutral": 0.75,
+    "positive": 0.7649
+  },
+  "params": 2261827,
+  "train_seconds": 930.1,
+  "ms_per_image": 1.271,
+  "device": "GPU"
+}

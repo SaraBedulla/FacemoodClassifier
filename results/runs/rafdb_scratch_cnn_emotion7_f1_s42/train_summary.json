@@ -1,0 +1,11 @@
+{
+  "run": "rafdb_scratch_cnn_emotion7_f1_s42",
+  "best_epoch": 78,
+  "epochs_trained": 98,
+  "fine_tune_start_epoch": null,
+  "best_val_loss": 0.7113,
+  "best_val_accuracy": 0.7622,
+  "params": 4825031,
+  "trainable_params": 4820679,
+  "train_seconds": 4422.2
+}

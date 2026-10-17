@@ -1,0 +1,19 @@
+{
+  "run": "rafdb_scratch_cnn_affect3_f1_s42",
+  "dataset": "rafdb",
+  "model": "scratch_cnn",
+  "labels": "affect3",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "test_accuracy": 0.824,
+  "test_macro_f1": 0.8076,
+  "per_class_recall": {
+    "negative": 0.73,
+    "neutral": 0.8838,
+    "positive": 0.8514
+  },
+  "params": 4824003,
+  "train_seconds": 1913.3,
+  "ms_per_image": 0.651,
+  "device": "GPU"
+}

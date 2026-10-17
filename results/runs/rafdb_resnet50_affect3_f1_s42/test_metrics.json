@@ -1,0 +1,19 @@
+{
+  "run": "rafdb_resnet50_affect3_f1_s42",
+  "dataset": "rafdb",
+  "model": "resnet50",
+  "labels": "affect3",
+  "train_fraction": 1.0,
+  "seed": 42,
+  "test_accuracy": 0.7813,
+  "test_macro_f1": 0.7621,
+  "per_class_recall": {
+    "negative": 0.778,
+    "neutral": 0.7147,
+    "positive": 0.8131
+  },
+  "params": 23593859,
+  "train_seconds": 1119.6,
+  "ms_per_image": 2.476,
+  "device": "GPU"
+}
