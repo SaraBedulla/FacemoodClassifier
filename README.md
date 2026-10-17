@@ -64,14 +64,32 @@ and evaluation, so the comparison is fair.
 
 ## Experiments
 
-1. **Main comparison**: all three models on `emotion7` and `affect3`, 3 random seeds each.
-2. **Training-data size**: the scratch CNN and MobileNetV2 trained on 10%, 25%, 50% and 100% of the
-   `emotion7` training set, to see where transfer learning helps most. ResNet50 is left out of this
-   experiment to save GPU time.
-3. Results are reported as mean ± std over seeds.
+All three models were trained on both datasets with both label schemes (12 runs, seed 42), with the
+same default settings. The one exception is the RAF-DB `emotion7` scratch CNN, which used
+`--lr 0.0003 --epochs 100 --patience 20`.
 
 **Metrics:** accuracy, macro-F1 (the classes are imbalanced), per-class recall, confusion matrix,
 number of parameters, training time, and inference time per image.
+
+The code also supports repeating runs with several seeds (`--seed`) and training on part of the data
+(`--train-fraction`); `compare.py` then reports mean ± std and plots macro-F1 against training-set size.
+These extra experiments were planned but not run in the available GPU time.
+
+## Results
+
+Test accuracy / macro-F1 (one run per setting):
+
+| Setting | Scratch CNN | MobileNetV2 | ResNet50 |
+|---|---|---|---|
+| FER-2013, `emotion7` | **64.8% / 0.633** | 63.0% / 0.605 | 63.8% / 0.603 |
+| FER-2013, `affect3` | 74.5% / 0.723 | 76.0% / 0.733 | **76.3% / 0.740** |
+| RAF-DB, `emotion7` | **78.7% / 0.700** | 65.4% / 0.575 | 69.7% / 0.608 |
+| RAF-DB, `affect3` | **82.4% / 0.808** | 75.6% / 0.740 | 78.1% / 0.762 |
+
+The CNN trained from scratch had the best macro-F1 in three of four settings and was the fastest at
+inference. Fine-tuning was essential for the pretrained models: with a frozen ImageNet backbone they
+reached only 45–67% validation accuracy, and fine-tuning the top stage added 10–19 points. The full
+analysis is in the project report.
 
 ## Project structure
 
@@ -95,7 +113,7 @@ FacemoodClassifier/
 │   │   └── train.py             # trains one model configuration (two phases for transfer models)
 │   ├── evaluation/
 │   │   ├── evaluate.py          # test-set metrics, confusion matrix, sample predictions per run
-│   │   └── compare.py           # mean ± std over seeds, data-size figure
+│   │   └── compare.py           # comparison tables and figures (mean ± std over seeds)
 │   └── visualization/
 │       └── plots.py             # shared figure style
 ├── DATASET.md                   # dataset links, description and splits
@@ -161,8 +179,9 @@ python -m src.evaluation.compare
 Each run saves its best model, config, training history, training curves and a validation
 summary to `results/runs/<dataset>_<model>_<labels>_f<fraction>_s<seed>/`. Evaluation adds
 `test_metrics.json`, `confusion_matrix.png` and `predictions.png` to the same folder. The comparison
-writes `results/tables/comparison/summary.csv` (mean ± std over seeds) and a macro-F1 vs training-data
-figure per label scheme to `results/figures/comparison/`.
+writes `results/tables/comparison/summary.csv` (mean ± std over seeds) and `fine_tuning.csv`, and
+figures comparing the models and the effect of fine-tuning to `results/figures/comparison/` (plus a
+macro-F1 vs training-data figure when several training fractions were run).
 
 Useful options for the transfer models: `--head-epochs` (default 10), `--fine-tune-lr` (default 1e-5),
 `--fine-tune-layers` (0 trains the head only) and `--img-size` (e.g. 128 for faster runs).

@@ -190,3 +190,49 @@ def plot_data_size(table, path, metric="test_macro_f1", title="Macro-F1 vs train
     ax.legend()
     save(fig, path)
 
+
+
+def plot_model_comparison(table, path, metric="test_macro_f1", title="Test macro-F1 per model"):
+    """Grouped bars: one group per (dataset, labels) setting, one bar per model.
+
+    table needs columns: setting, model, <metric>_mean.
+    """
+    settings = list(dict.fromkeys(table["setting"]))
+    models = list(dict.fromkeys(table["model"]))
+    fig, ax = plt.subplots(figsize=(9, 4))
+    x = np.arange(len(settings))
+    width = 0.8 / len(models)
+    for i, (color, model) in enumerate(zip(SERIES, models)):
+        rows = table[table["model"] == model].set_index("setting").reindex(settings)
+        values = rows[f"{metric}_mean"].to_numpy()
+        bars = ax.bar(x + (i - (len(models) - 1) / 2) * width, values, width * 0.92,
+                      color=color, label=model, zorder=2)
+        ax.bar_label(bars, fmt="%.2f", fontsize=7, color=INK_2, padding=2)
+    ax.set_xticks(x, settings)
+    ax.set_ylim(0, 1)
+    ax.set_ylabel(metric.replace("test_", "").replace("_", "-"))
+    ax.grid(axis="x", visible=False)
+    ax.legend(ncol=len(models), loc="upper left")
+    ax.set_title(title)
+    save(fig, path)
+
+
+def plot_fine_tuning_gain(table, path):
+    """Validation accuracy of each transfer run with the frozen backbone vs after fine-tuning.
+
+    table needs columns: setting, model, frozen_val_accuracy, best_val_accuracy.
+    """
+    labels = [f"{m}\n{s.replace(' ', chr(10))}" for m, s in zip(table["model"], table["setting"])]
+    fig, ax = plt.subplots(figsize=(10, 4.2))
+    x = np.arange(len(table))
+    for offset, column, color, name in [(-0.2, "frozen_val_accuracy", BASELINE, "frozen backbone (head only)"),
+                                        (0.2, "best_val_accuracy", SERIES[0], "after fine-tuning")]:
+        bars = ax.bar(x + offset, table[column], 0.37, color=color, label=name, zorder=2)
+        ax.bar_label(bars, fmt="%.2f", fontsize=7, color=INK_2, padding=2)
+    ax.set_xticks(x, labels, fontsize=8)
+    ax.set_ylim(0, 1)
+    ax.set_ylabel("Validation accuracy")
+    ax.grid(axis="x", visible=False)
+    ax.legend(loc="upper left", ncol=2)
+    ax.set_title("Effect of fine-tuning the pretrained backbone")
+    save(fig, path)
